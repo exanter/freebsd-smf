@@ -1,0 +1,6 @@
+-I/usr/local/include
+-I/usr/local/include/lua54
+-L/usr/local/lib
+-lsqlite3
+-llua-5.4
+-lm

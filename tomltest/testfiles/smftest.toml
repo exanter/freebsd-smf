@@ -1,0 +1,58 @@
+# Sample TOML Manifest Emulating an SMF Service (e.g., for a Hypothetical Web Server)
+# This structure mirrors SMF XML elements:
+# - Top-level: service definition (like <service>)
+# - Instances: Array of tables for multiple instances (like <instance>)
+# - Dependencies: Array of dependency tables (like <dependency>)
+# - Methods: Table for exec methods (start, stop, etc., like <exec_method>)
+# - Properties: Nested tables for property groups (like <property_group>)
+# - Fault Management: Options for restarts, thresholds (SMF-inspired)
+
+[service]
+name = "network/http/apache24"  # FMRI-like path (service category/name)
+type = "service"  # Could be "milestone", "restarter", etc.
+start_timeout_seconds = 60  # Equivalent to start timeout in exec_method
+description = "Apache HTTP Server"
+
+# Dependencies (array of tables, like SMF <dependency> elements)
+[[dependencies]]
+name = "network"
+grouping = "require_all"  # Options: require_all, require_any, optional_all, exclude_all
+restart_on = "none"  # Options: none, error, refresh, restart
+type = "service"
+
+[[dependencies]]
+name = "filesystem/local"
+grouping = "require_all"
+restart_on = "none"
+type = "service"
+
+# Exec Methods (table with keys for each method, like SMF <exec_method>)
+[methods]
+start = "/usr/local/etc/rc.d/apache24 start"  # Command or script
+stop = "/usr/local/etc/rc.d/apache24 stop"
+refresh = "/usr/local/etc/rc.d/apache24 reload"  # Optional
+timeout_seconds = 30  # Global timeout, or per-method
+
+# Property Groups (nested tables, like SMF <property_group>)
+[properties.general]
+enabled = true  # Instance-level enablement
+durability = "application"  # transient, child, application
+
+[properties.config]
+document_root = "/usr/local/www/apache24/data"
+port = 80
+log_level = "warn"
+
+# Fault Management (SMF-like restart policies)
+[fault_management]
+restart_policy = "always"  # always, on-failure, never
+max_restarts = 5  # Threshold for restarts within interval
+restart_interval_seconds = 300  # Time window for counting failures
+action_on_threshold = "disable"  # disable, notify, etc.
+
+# Instances (array of tables for multi-instance services)
+[[instances]]
+name = "default"
+enabled = true
+[properties]  # Instance-specific props overriding service-level
+port = 8080

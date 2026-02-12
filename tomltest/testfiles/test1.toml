@@ -1,0 +1,35 @@
+# This is a TOML document.
+title = "TOML Example"
+
+[owner]
+name = "Tom Preston-Werner"
+organization = "GitHub"
+bio = """
+GitHub Cofounder & CEO
+Likes tater tots and beer.
+""" # Multiline strings use triple quotes
+dob = 1979-05-27T07:32:00Z # First class dates? Why not?
+
+[database]
+server = "192.168.1.1"
+ports = [ 8001, 8001, 8002 ] # Arrays can span multiple lines
+connection_max = 5000
+enabled = true
+
+# Tables can be nested using dot notation or multiple bracketed declarations
+[servers.alpha]
+ip = "10.0.0.1"
+dc = "eqdc10"
+
+[servers.beta]
+ip = "10.0.0.2"
+dc = "eqdc10" # Comments can be on the same line
+
+# Arrays of tables are defined with double square brackets
+[[users]]
+name = "Alice"
+age = 30
+
+[[users]]
+name = "Bob"
+age = 25
